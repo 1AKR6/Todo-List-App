@@ -112,3 +112,215 @@ setNewTask(""); clears the input field after adding a task.
 
 React detects the state change and updates the UI automatically without refreshing the page.
 
+
+
+🚀 How This Code Works (Step by Step)
+📌 1. State Management
+js
+Copy
+Edit
+const [tasks, setTasks] = useState([
+  "Eat Breakfast",
+  "Creating Webpage",
+  "Purpose: It hides any content that exceeds the allocated width of the span."
+]);
+const [newTask, setNewTask] = useState("");
+tasks: Stores the list of tasks.
+
+setTasks: Updates the tasks state when tasks are added, deleted, or reordered.
+
+newTask: Stores the current text input value.
+
+setNewTask: Updates newTask when a user types in the input field.
+
+📌 2. Handling User Input
+js
+Copy
+Edit
+const handleinputchange = (event) => {
+  setNewTask(event.target.value);
+};
+This function updates newTask whenever a user types in the input field.
+
+📌 3. Adding a New Task
+js
+Copy
+Edit
+const addTask = () => {
+  if (newTask.trim() === "") return; // Prevent empty tasks
+
+  setTasks([...tasks, newTask]); // Add new task to the list
+  setNewTask(""); // Clear input field after adding
+};
+Prevents adding empty tasks.
+
+Updates the tasks state by creating a new array [...tasks, newTask] that includes the old tasks plus the new one.
+
+Clears the input field after adding.
+
+📌 4. Deleting a Task
+js
+Copy
+Edit
+const deleteTask = (index) => {
+  setTasks(tasks.filter((_, i) => i !== index));
+};
+Removes a task by filtering out the task at the given index.
+
+tasks.filter((_, i) => i !== index) creates a new array that excludes the selected task.
+
+📌 5. Moving a Task Up
+js
+Copy
+Edit
+const movetaskup = (index) => {
+  if (index === 0) return; // Prevent moving the first task up
+
+  const updatedTasks = [...tasks];
+  [updatedTasks[index], updatedTasks[index - 1]] = [
+    updatedTasks[index - 1],
+    updatedTasks[index]
+  ];
+  setTasks(updatedTasks);
+};
+Prevents moving the first task up.
+
+Creates a copy of the tasks array.
+
+Swaps the selected task with the one above it.
+
+Updates the state, which causes the UI to re-render.
+
+📌 6. Moving a Task Down
+js
+Copy
+Edit
+const movetaskdown = (index) => {
+  if (index === tasks.length - 1) return; // Prevent moving the last task down
+
+  const updatedTasks = [...tasks];
+  [updatedTasks[index], updatedTasks[index + 1]] = [
+    updatedTasks[index + 1],
+    updatedTasks[index]
+  ];
+  setTasks(updatedTasks);
+};
+Prevents moving the last task down.
+
+Creates a copy of tasks.
+
+Swaps the selected task with the one below it.
+
+Updates the state, triggering a UI update.
+
+📌 7. UI Rendering
+📍 Header Section
+js
+Copy
+Edit
+<div className="Image bg-[url(https://images.unsplash.com/photo-1719581886973-30aa96abd38f?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fA%3D%3D)]  
+h-[20%] w-full bg-cyan-300 flex justify-center items-center rounded-lg">
+  <h1 className="text-8xl font-bold text-white">TODO APP</h1>
+</div>
+Displays the app title (TODO APP).
+
+Uses a background image.
+
+Applies Tailwind CSS classes for styling.
+
+📍 Input Field & "Add Task" Button
+js
+Copy
+Edit
+<input
+  type="text"
+  className="Input-field border-2 w-1/2 p-2 rounded-lg hover:scale-105 transition-smooth duration-500"
+  style={{ fontSize: "20px" }}
+  placeholder="Enter Your Task ..."
+  value={newTask}
+  onChange={handleinputchange}
+/>
+
+<button
+  className="bg-lime-500 rounded-md px-4 py-2 hover:bg-lime-700 hover:text-white hover:shadow-xl hover:shadow-lime-600 transition-smooth duration-500 cursor-pointer"
+  onClick={addTask}
+>
+  Add Task
+</button>
+User types in the input field, and handleinputchange updates newTask.
+
+Clicking "Add Task" calls addTask(), updating the task list.
+
+📍 Task List Display
+js
+Copy
+Edit
+{tasks.map((task, index) => (
+  <li
+    key={index}
+    className="Listed-Tasks flex items-center justify-between bg-gray-200 px-4 py-3 rounded-lg shadow-md hover:shadow-lg transition duration-300 w-full mt-3 hover:scale-105"
+  >
+    <span className="Task-List text-lg font-medium flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+      {task}
+    </span>
+Maps through the tasks array to display each task.
+
+Ensures long text doesn't overflow using overflow-hidden text-ellipsis.
+
+📍 Action Buttons (Delete, Move Up, Move Down)
+js
+Copy
+Edit
+<button
+  className="bg-red-300 rounded-md px-8 py-2 hover:bg-red-700 hover:text-white hover:shadow-xl hover:shadow-red-300 transition-smooth duration-500 cursor-pointer ml-5"
+  onClick={() => deleteTask(index)}
+>
+  Delete
+</button>
+
+<button
+  className="Taskup bg-blue-500 rounded-md px-8 py-2 hover:bg-lime-500 hover:text-white hover:shadow-xl hover:shadow-green-300 transition-smooth duration-500 cursor-pointer ml-5"
+  onClick={() => movetaskup(index)}
+>
+  ⬆
+</button>
+
+<button
+  className="Taskdown bg-blue-500 rounded-md px-8 py-2 hover:bg-red-700 hover:text-white hover:shadow-xl hover:shadow-red-300 transition-smooth duration-500 cursor-pointer ml-5"
+  onClick={() => movetaskdown(index)}
+>
+  ⬇️
+</button>
+Each task gets action buttons:
+
+🗑 Delete Task → Calls deleteTask(index).
+
+⬆ Move Task Up → Calls movetaskup(index).
+
+⬇ Move Task Down → Calls movetaskdown(index).
+
+Styled with hover effects for a smooth UI.
+
+🎯 Summary
+✅ React State (useState)
+
+Stores tasks and updates them dynamically.
+
+✅ User Interactions
+
+Typing updates newTask.
+
+Clicking "Add Task" appends a task.
+
+Clicking "Delete" removes a task.
+
+Clicking "⬆" or "⬇" swaps tasks.
+
+✅ React Re-renders
+
+State changes → UI updates automatically.
+
+✅ Tailwind CSS Enhancements
+
+Smooth animations, hover effects, and responsive design.
+
