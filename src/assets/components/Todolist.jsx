@@ -56,7 +56,7 @@ function Todolist() {
         <div className="bg-lime-600 rounded-md px-8 py-2 text-white hover:bg-lime-700 hover:shadow-xl hover:shadow-lime-600 transition-smooth duration-500 cursor-pointer">
           Home
         </div>
-        <div className="bg-lime-600 rounded-md px-4 py-2 hover:bg-lime-700 hover:text-white hover:shadow-xl hover:shadow-lime-600 transition-smooth duration-500 cursor-pointer">
+        <div className="bg-lime-600 rounded-md px-6 py-2 text-white hover:bg-lime-700 hover:shadow-xl hover:shadow-lime-600 transition-smooth duration-500 cursor-pointer">
           Your Tasks
         </div>
       </div>
@@ -93,14 +93,14 @@ function Todolist() {
               </span>
 
               <button
-                className="bg-red-500 rounded-md px-8 py-2 hover:bg-red-700 hover:text-white hover:shadow-xl hover:shadow-red-300 transition-smooth duration-500 cursor-pointer ml-5"
+                className="bg-red-300 rounded-md px-8 py-2 hover:bg-red-700 hover:text-white hover:shadow-xl hover:shadow-red-300 transition-smooth duration-500 cursor-pointer ml-5"
                 onClick={() => deleteTask(index)}
               >
                 Delete
               </button>
 
               <button
-                className="Taskup bg-blue-500 rounded-md px-8 py-2 hover:bg-red-700 hover:text-white hover:shadow-xl hover:shadow-red-300 transition-smooth duration-500 cursor-pointer ml-5"
+                className="Taskup bg-blue-500 rounded-md px-8 py-2 hover:bg-lime-500 hover:text-white hover:shadow-xl hover:shadow-green-300 transition-smooth duration-500 cursor-pointer ml-5"
                 onClick={() => movetaskup(index)}
               >
                 ⬆
