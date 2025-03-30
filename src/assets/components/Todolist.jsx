@@ -1,13 +1,13 @@
 import React from "react";
 import { useState } from "react";
+import { FaEdit } from "react-icons/fa";
+
 
 function Todolist() {
-  const [tasks, setTasks] = useState([
-    "Eat Breakfast",
-    "Creating Webpage",
-    "Purpose: It hides any content that exceeds the allocated width of the span."
-  ]);
+  const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [editIndex , seteditIndex] = useState(null);   //This stores the index of the task which is currently being edited.
+  const [editedTask , seteditedTask] = useState(""); //This stores the value of the task which is currently being edited.
 
   const handleinputchange = (event) => {
     setNewTask(event.target.value);
@@ -22,6 +22,23 @@ function Todolist() {
 
   const deleteTask = (index) => {
     setTasks(tasks.filter((_, i) => i !== index));
+  };
+
+  const editTask = (index) => {
+    seteditIndex(index); //It sets the index the task which is going for editing process.
+    seteditedTask(tasks[index]); //This targets the task index in which we are going to edit. 
+  }
+
+  const saveTask = () => {
+    if (editedTask.trim() === "") return;
+
+    const updatedTasks = [...tasks];
+    updatedTasks[editIndex] = editedTask;
+    setTasks(updatedTasks);
+
+    // Reset edit state
+    seteditIndex(null);
+    seteditedTask("");
   };
 
   const movetaskup = (index) => {
@@ -87,11 +104,36 @@ function Todolist() {
             <li
               key={index}
               className="Listed-Tasks flex items-center justify-between bg-gray-200 px-4 py-3 rounded-lg shadow-md hover:shadow-lg transition duration-300 w-full mt-3 hover:scale-105"
-            >
-              <span className="Task-List text-lg font-medium flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
-                {task}
-              </span>
+            > 
+            {/* 👇 Show input when editing, otherwise show task */}
+              {editIndex === index ?(<input
+          type="text"
+          className="Input-field border-2 w-1/2 p-2 rounded-lg hover:scale-105 transition-smooth duration-500"
+          style={{ fontSize: "20px" }}
+          value={editedTask}
+          onChange={(e) => seteditedTask(e.target.value)}
+        />):(<span className="Task-List text-lg font-medium flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+          {task}
+        </span>          
+        )}
 
+        {/* 👇 Show Save button when editing, otherwise show Edit button */}
+
+        {editIndex === index ? (<button
+                  className="bg-green-500 rounded-md px-6 py-2 hover:bg-green-700 hover:text-white transition duration-300 cursor-pointer ml-5"
+                  onClick={saveTask}
+                >
+                  💾 Save
+                </button>):(<button
+                  className="bg-sky-200 rounded-md px-8 py-3 hover:bg-sky-500 hover:text-white hover:shadow-xl hover:shadow-sky-300 transition-smooth duration-500 cursor-pointer ml-5"
+                  onClick={() => editTask(index)}
+                >
+                  <FaEdit />
+                </button>)
+                
+                }    
+
+             
               <button
                 className="bg-red-300 rounded-md px-8 py-2 hover:bg-red-700 hover:text-white hover:shadow-xl hover:shadow-red-300 transition-smooth duration-500 cursor-pointer ml-5"
                 onClick={() => deleteTask(index)}
