@@ -1,67 +1,92 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaEdit } from "react-icons/fa";
+import TaskContext from "../context/Taskcontext";  // Import Context
 
 
 function Todolist() {
-  const [tasks, setTasks] = useState([]);
+
+  // const [tasks, setTasks] = useState([]);
+
+  const { tasks, addTask, deleteTask, editTask, moveTaskUp, moveTaskDown } = useContext(TaskContext); // Access Context API
+
   const [newTask, setNewTask] = useState("");
+
   const [editIndex , seteditIndex] = useState(null);   //This stores the index of the task which is currently being edited.
+
   const [editedTask , seteditedTask] = useState(""); //This stores the value of the task which is currently being edited.
 
   const handleinputchange = (event) => {
     setNewTask(event.target.value);
   };
 
-  const addTask = () => {
-    if (newTask.trim() === "") return; // Prevent empty tasks
+  // const addTask = () => {
+  //   if (newTask.trim() === "") return; // Prevent empty tasks
 
-    setTasks([...tasks, newTask]); // Add new task to the list
-    setNewTask(""); // Clear input field after adding
+  //   setTasks([...tasks, newTask]); // Add new task to the list
+  //   setNewTask(""); // Clear input field after adding
+  // };
+
+  // 🦁Adding Add button through context api
+  const handleAddTask = () => {
+    addTask(newTask);
+    setNewTask(""); 
   };
 
-  const deleteTask = (index) => {
-    setTasks(tasks.filter((_, i) => i !== index));
+  // const deleteTask = (index) => {
+  //   setTasks(tasks.filter((_, i) => i !== index));
+  // };
+
+  // const editTask = (index) => {
+  //   seteditIndex(index); //It sets the index the task which is going for editing process.
+  //   seteditedTask(tasks[index]); //This targets the task index in which we are going to edit. 
+  // }
+  
+  // 🦁Adding Edit button through context api
+  const handleEditTask = (index) => {
+    seteditIndex(index); 
+    seteditedTask(tasks[index]);
   };
 
-  const editTask = (index) => {
-    seteditIndex(index); //It sets the index the task which is going for editing process.
-    seteditedTask(tasks[index]); //This targets the task index in which we are going to edit. 
-  }
+  // const saveTask = () => {
+  //   if (editedTask.trim() === "") return;
 
-  const saveTask = () => {
-    if (editedTask.trim() === "") return;
+  //   const updatedTasks = [...tasks];
+  //   updatedTasks[editIndex] = editedTask;
+  //   setTasks(updatedTasks);
 
-    const updatedTasks = [...tasks];
-    updatedTasks[editIndex] = editedTask;
-    setTasks(updatedTasks);
+  //   // Reset edit state
+  //   seteditIndex(null);
+  //   seteditedTask("");
+  // };
 
-    // Reset edit state
+  // 🦁 Adding the save button through Context api
+  const handleSaveTask = () => {
+    editTask(editIndex, editedTask);
     seteditIndex(null);
     seteditedTask("");
   };
 
-  const movetaskup = (index) => {
-    if (index === 0) return; // Prevent moving the first task up
+  // const movetaskup = (index) => {
+  //   if (index === 0) return; // Prevent moving the first task up
 
-    const updatedTasks = [...tasks];
-    [updatedTasks[index], updatedTasks[index - 1]] = [
-      updatedTasks[index - 1],
-      updatedTasks[index]
-    ];
-    setTasks(updatedTasks);
-  };
+  //   const updatedTasks = [...tasks];
+  //   [updatedTasks[index], updatedTasks[index - 1]] = [
+  //     updatedTasks[index - 1],
+  //     updatedTasks[index]
+  //   ];
+  //   setTasks(updatedTasks);
+  // };
 
-  const movetaskdown = (index) => {
-    if (index === tasks.length - 1) return; // Prevent moving the last task down
+  // const movetaskdown = (index) => {
+  //   if (index === tasks.length - 1) return; // Prevent moving the last task down
 
-    const updatedTasks = [...tasks];
-    [updatedTasks[index], updatedTasks[index + 1]] = [
-      updatedTasks[index + 1],
-      updatedTasks[index]
-    ];
-    setTasks(updatedTasks);
-  };
+  //   const updatedTasks = [...tasks];
+  //   [updatedTasks[index], updatedTasks[index + 1]] = [
+  //     updatedTasks[index + 1],
+  //     updatedTasks[index]
+  //   ];
+  //   setTasks(updatedTasks);
+  // };
 
   return (
     <>
@@ -92,7 +117,8 @@ function Todolist() {
 
         <button
           className="bg-lime-500 rounded-md px-4 py-2 hover:bg-lime-700 hover:text-white hover:shadow-xl hover:shadow-lime-600 transition-smooth duration-500 cursor-pointer"
-          onClick={addTask}
+          // onClick={addTask}
+          onClick={handleAddTask}
         >
           Add Task
         </button>
@@ -121,12 +147,14 @@ function Todolist() {
 
         {editIndex === index ? (<button
                   className="bg-green-500 rounded-md px-6 py-2 hover:bg-green-700 hover:text-white transition duration-300 cursor-pointer ml-5"
-                  onClick={saveTask}
+                  // onClick={saveTask}
+                  onClick={handleSaveTask}
+
                 >
-                  💾 Save
+                  💾 
                 </button>):(<button
                   className="bg-sky-200 rounded-md px-8 py-3 hover:bg-sky-500 hover:text-white hover:shadow-xl hover:shadow-sky-300 transition-smooth duration-500 cursor-pointer ml-5"
-                  onClick={() => editTask(index)}
+                  onClick={() => handleEditTask(index)}
                 >
                   <FaEdit />
                 </button>)
@@ -143,14 +171,14 @@ function Todolist() {
 
               <button
                 className="Taskup bg-blue-500 rounded-md px-8 py-2 hover:bg-lime-500 hover:text-white hover:shadow-xl hover:shadow-green-300 transition-smooth duration-500 cursor-pointer ml-5"
-                onClick={() => movetaskup(index)}
+                onClick={() => moveTaskUp(index)}
               >
                 ⬆
               </button>
 
               <button
                 className="Taskdown bg-blue-500 rounded-md px-8 py-2 hover:bg-red-700 hover:text-white hover:shadow-xl hover:shadow-red-300 transition-smooth duration-500 cursor-pointer ml-5"
-                onClick={() => movetaskdown(index)}
+                onClick={() => moveTaskDown(index)}
               >
                 ⬇️
               </button>
@@ -163,3 +191,8 @@ function Todolist() {
 }
 
 export default Todolist;
+
+
+
+
+
