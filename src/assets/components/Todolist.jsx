@@ -7,22 +7,20 @@ function Todolist() {
     useContext(TaskContext); // Access Context API
 
   const [newTask, setNewTask] = useState("");
-
-  const [editIndex, seteditIndex] = useState(null); //This stores the index of the task which is currently being edited.
-
-  const [editedTask, seteditedTask] = useState(""); //This stores the value of the task which is currently being edited.
+  const [editIndex, seteditIndex] = useState(null); // This stores the index of the task which is currently being edited.
+  const [editedTask, seteditedTask] = useState(""); // This stores the value of the task which is currently being edited.
 
   const handleinputchange = (event) => {
     setNewTask(event.target.value);
   };
 
-  // 🦁Adding Add button through context api
+  // 🦁 Adding Add button through context api
   const handleAddTask = () => {
     addTask(newTask);
     setNewTask("");
   };
 
-  // 🦁Adding Edit button through context api
+  // 🦁 Adding Edit button through context api
   const handleEditTask = (index) => {
     seteditIndex(index);
     seteditedTask(tasks[index]);
@@ -33,6 +31,19 @@ function Todolist() {
     editTask(editIndex, editedTask);
     seteditIndex(null);
     seteditedTask("");
+  };
+
+  // 🛠 Bug 1 Cancel edit before moving tasks
+  const handleMoveUp = (index) => {
+    seteditIndex(null);
+    seteditedTask("");
+    moveTaskUp(index);
+  };
+
+  const handleMoveDown = (index) => {
+    seteditIndex(null);
+    seteditedTask("");
+    moveTaskDown(index);
   };
 
   return (
@@ -50,7 +61,7 @@ function Todolist() {
         </div>
       </div>
 
-      <div className="Nav px-80 flex gap-5  justify-center pt-5 ">
+      <div className="Nav px-80 flex gap-5 justify-center pt-5 ">
         <input
           type="text"
           className="Input-field border-2 w-1/2 p-2 rounded-lg hover:scale-105 transition-smooth duration-500"
@@ -91,7 +102,6 @@ function Todolist() {
               )}
 
               {/* 👇 Show Save button when editing, otherwise show Edit button */}
-
               {editIndex === index ? (
                 <button
                   className="bg-green-500 rounded-md px-6 py-2 hover:bg-green-700 hover:text-white transition duration-300 cursor-pointer ml-5"
@@ -108,23 +118,28 @@ function Todolist() {
                 </button>
               )}
 
+              {/* ✅ Bug 2 fix applied below 👇 */}
               <button
                 className="bg-red-300 rounded-md px-8 py-2 hover:bg-red-700 hover:text-white hover:shadow-xl hover:shadow-red-300 transition-smooth duration-500 cursor-pointer ml-5"
-                onClick={() => deleteTask(index)}
+                onClick={() => {
+                  seteditIndex(null);
+                  seteditedTask("");
+                  deleteTask(index);
+                }}
               >
                 Delete
               </button>
 
               <button
                 className="Taskup bg-blue-500 rounded-md px-8 py-2 hover:bg-lime-500 hover:text-white hover:shadow-xl hover:shadow-green-300 transition-smooth duration-500 cursor-pointer ml-5"
-                onClick={() => moveTaskUp(index)}
+                onClick={() => handleMoveUp(index)}
               >
                 ⬆
               </button>
 
               <button
                 className="Taskdown bg-blue-500 rounded-md px-8 py-2 hover:bg-red-700 hover:text-white hover:shadow-xl hover:shadow-red-300 transition-smooth duration-500 cursor-pointer ml-5"
-                onClick={() => moveTaskDown(index)}
+                onClick={() => handleMoveDown(index)}
               >
                 ⬇️
               </button>
