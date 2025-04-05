@@ -1,63 +1,32 @@
 import React, { useState, useContext } from "react";
 import { FaEdit } from "react-icons/fa";
-import TaskContext from "../context/Taskcontext";  // Import Context
-
+import TaskContext from "../context/Taskcontext"; // Import Context
 
 function Todolist() {
-
-  // const [tasks, setTasks] = useState([]);
-
-  const { tasks, addTask, deleteTask, editTask, moveTaskUp, moveTaskDown } = useContext(TaskContext); // Access Context API
+  const { tasks, addTask, deleteTask, editTask, moveTaskUp, moveTaskDown } =
+    useContext(TaskContext); // Access Context API
 
   const [newTask, setNewTask] = useState("");
 
-  const [editIndex , seteditIndex] = useState(null);   //This stores the index of the task which is currently being edited.
+  const [editIndex, seteditIndex] = useState(null); //This stores the index of the task which is currently being edited.
 
-  const [editedTask , seteditedTask] = useState(""); //This stores the value of the task which is currently being edited.
+  const [editedTask, seteditedTask] = useState(""); //This stores the value of the task which is currently being edited.
 
   const handleinputchange = (event) => {
     setNewTask(event.target.value);
   };
 
-  // const addTask = () => {
-  //   if (newTask.trim() === "") return; // Prevent empty tasks
-
-  //   setTasks([...tasks, newTask]); // Add new task to the list
-  //   setNewTask(""); // Clear input field after adding
-  // };
-
   // 🦁Adding Add button through context api
   const handleAddTask = () => {
     addTask(newTask);
-    setNewTask(""); 
+    setNewTask("");
   };
 
-  // const deleteTask = (index) => {
-  //   setTasks(tasks.filter((_, i) => i !== index));
-  // };
-
-  // const editTask = (index) => {
-  //   seteditIndex(index); //It sets the index the task which is going for editing process.
-  //   seteditedTask(tasks[index]); //This targets the task index in which we are going to edit. 
-  // }
-  
   // 🦁Adding Edit button through context api
   const handleEditTask = (index) => {
-    seteditIndex(index); 
+    seteditIndex(index);
     seteditedTask(tasks[index]);
   };
-
-  // const saveTask = () => {
-  //   if (editedTask.trim() === "") return;
-
-  //   const updatedTasks = [...tasks];
-  //   updatedTasks[editIndex] = editedTask;
-  //   setTasks(updatedTasks);
-
-  //   // Reset edit state
-  //   seteditIndex(null);
-  //   seteditedTask("");
-  // };
 
   // 🦁 Adding the save button through Context api
   const handleSaveTask = () => {
@@ -65,28 +34,6 @@ function Todolist() {
     seteditIndex(null);
     seteditedTask("");
   };
-
-  // const movetaskup = (index) => {
-  //   if (index === 0) return; // Prevent moving the first task up
-
-  //   const updatedTasks = [...tasks];
-  //   [updatedTasks[index], updatedTasks[index - 1]] = [
-  //     updatedTasks[index - 1],
-  //     updatedTasks[index]
-  //   ];
-  //   setTasks(updatedTasks);
-  // };
-
-  // const movetaskdown = (index) => {
-  //   if (index === tasks.length - 1) return; // Prevent moving the last task down
-
-  //   const updatedTasks = [...tasks];
-  //   [updatedTasks[index], updatedTasks[index + 1]] = [
-  //     updatedTasks[index + 1],
-  //     updatedTasks[index]
-  //   ];
-  //   setTasks(updatedTasks);
-  // };
 
   return (
     <>
@@ -104,8 +51,6 @@ function Todolist() {
       </div>
 
       <div className="Nav px-80 flex gap-5  justify-center pt-5 ">
-        {/* <h1 className='text-3xl font-semibold'>Tasks</h1> */}
-
         <input
           type="text"
           className="Input-field border-2 w-1/2 p-2 rounded-lg hover:scale-105 transition-smooth duration-500"
@@ -117,7 +62,6 @@ function Todolist() {
 
         <button
           className="bg-lime-500 rounded-md px-4 py-2 hover:bg-lime-700 hover:text-white hover:shadow-xl hover:shadow-lime-600 transition-smooth duration-500 cursor-pointer"
-          // onClick={addTask}
           onClick={handleAddTask}
         >
           Add Task
@@ -130,38 +74,40 @@ function Todolist() {
             <li
               key={index}
               className="Listed-Tasks flex items-center justify-between bg-gray-200 px-4 py-3 rounded-lg shadow-md hover:shadow-lg transition duration-300 w-full mt-3 hover:scale-105"
-            > 
-            {/* 👇 Show input when editing, otherwise show task */}
-              {editIndex === index ?(<input
-          type="text"
-          className="Input-field border-2 w-1/2 p-2 rounded-lg hover:scale-105 transition-smooth duration-500"
-          style={{ fontSize: "20px" }}
-          value={editedTask}
-          onChange={(e) => seteditedTask(e.target.value)}
-        />):(<span className="Task-List text-lg font-medium flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
-          {task}
-        </span>          
-        )}
+            >
+              {/* 👇 Show input when editing, otherwise show task */}
+              {editIndex === index ? (
+                <input
+                  type="text"
+                  className="Input-field border-2 w-1/2 p-2 rounded-lg hover:scale-105 transition-smooth duration-500"
+                  style={{ fontSize: "20px" }}
+                  value={editedTask}
+                  onChange={(e) => seteditedTask(e.target.value)}
+                />
+              ) : (
+                <span className="Task-List text-lg font-medium flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+                  {task}
+                </span>
+              )}
 
-        {/* 👇 Show Save button when editing, otherwise show Edit button */}
+              {/* 👇 Show Save button when editing, otherwise show Edit button */}
 
-        {editIndex === index ? (<button
+              {editIndex === index ? (
+                <button
                   className="bg-green-500 rounded-md px-6 py-2 hover:bg-green-700 hover:text-white transition duration-300 cursor-pointer ml-5"
-                  // onClick={saveTask}
                   onClick={handleSaveTask}
-
                 >
-                  💾 
-                </button>):(<button
+                  💾
+                </button>
+              ) : (
+                <button
                   className="bg-sky-200 rounded-md px-8 py-3 hover:bg-sky-500 hover:text-white hover:shadow-xl hover:shadow-sky-300 transition-smooth duration-500 cursor-pointer ml-5"
                   onClick={() => handleEditTask(index)}
                 >
                   <FaEdit />
-                </button>)
-                
-                }    
+                </button>
+              )}
 
-             
               <button
                 className="bg-red-300 rounded-md px-8 py-2 hover:bg-red-700 hover:text-white hover:shadow-xl hover:shadow-red-300 transition-smooth duration-500 cursor-pointer ml-5"
                 onClick={() => deleteTask(index)}
@@ -191,8 +137,3 @@ function Todolist() {
 }
 
 export default Todolist;
-
-
-
-
-
