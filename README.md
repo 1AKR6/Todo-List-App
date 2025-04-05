@@ -64,6 +64,70 @@ State Management: Uses React's useContext and useState to manage the task list g
 • Forgot to pass context properly	Wrapped              • components with TaskContextProvider in App.js
 
 
+🐞 Bug Fix Documentation
+
+🐛 Bug 1: Moving Tasks (Up/Down) While Editing Causes UI Glitch
+Issue:
+If a task is being edited and you click the ⬆ Move Up or ⬇ Move Down buttons, the UI behaves unexpectedly.
+Either the wrong task moves or the edit state persists incorrectly, creating confusion.
+
+Cause:
+The editIndex and editedTask state were not reset before moving a task, causing state mismatch.
+
+Fix:
+We added a reset before moving the task:
+seteditIndex(null);
+seteditedTask("");
+moveTaskUp(index); // or moveTaskDown(index)
+
+
+Location: Inside the handleMoveUp() and handleMoveDown() functions:
+
+const handleMoveUp = (index) => {
+  seteditIndex(null);
+  seteditedTask("");
+  moveTaskUp(index);
+};
+
+const handleMoveDown = (index) => {
+  seteditIndex(null);
+  seteditedTask("");
+  moveTaskDown(index);
+};
+
+Result:
+Now, moving tasks clears any ongoing edit, preventing unexpected behavior or wrong task positioning.
+
+🐛 Bug 2: Wrong Task Gets Deleted After Editing
+Issue:
+After editing a task, clicking the Delete button could remove the wrong task (usually the one after the edited one).
+
+Cause:
+The editIndex and editedTask were not cleared before deletion, causing an incorrect state reference during deletion.
+
+Fix:
+Resetting the editing state before calling deleteTask(index):
+
+seteditIndex(null);
+seteditedTask("");
+deleteTask(index);
+Location: In the Delete button:
+
+onClick={() => {
+  seteditIndex(null);
+  seteditedTask("");
+  deleteTask(index);
+}}
+
+Result:
+Deletes the correct task now, even after editing, with no interference from editing state.
+
+✅ How to Test Bug Fixes
+Start editing a task and try moving it up/down → Edit mode should cancel and task moves correctly.
+
+Start editing a task and click delete on any task → Correct task should be deleted, not the wrong one.
+
+
 🔮 What’s Coming Next?
 This is just the start. I plan to add:
 
