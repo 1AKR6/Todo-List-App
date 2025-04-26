@@ -7,5 +7,5 @@ import TaskContextProvider from './assets/context/TaskContextProvider.jsx'
 createRoot(document.getElementById('root')).render(
   <TaskContextProvider>
     <App />
-  </TaskContextProvider>,
+  </TaskContextProvider>
 )
