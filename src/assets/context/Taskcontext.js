@@ -1,7 +1,7 @@
-import React from "react";
+import { createContext } from "react";
 
-// 1️⃣ Creating the Context
+// Create the Context
+const TaskContext = createContext();
 
- const TaskContext = React.createContext()
-
- export default TaskContext;
+// Export the Context
+export default TaskContext;

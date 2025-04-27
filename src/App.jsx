@@ -1,44 +1,39 @@
-// import React from 'react'
-// import Todolist from './assets/components/Todolist';
-// import { FaEdit } from "react-icons/fa";
+// Import necessary modules and components from react-router-dom and local files
+import { Routes, Route } from "react-router-dom";
+import Home from "./assets/components/Home";              // Home page component
+import AboutPage from "./assets/components/AboutPage";    // About page component
+import Navbar from "./assets/components/Navbar";          // Navbar component
+import TaskContextProvider from "./assets/context/TaskContextProvider.jsx"; // Global task context provider
+import { FaEdit } from "react-icons/fa";                   // Importing an edit icon (currently not used here)
+import Todolist from "./assets/components/Todolist.jsx";   // Todolist page component
 
-
-// function App() {
-//   return (
-//     <div className='p-5 bg-zinc-300 w-full h-screen'>
-//       <Todolist />
-//     </div>
-//   )
-// }
-
-// export default App;
-
-
-import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"; // Import Router components
-import Todolist from "./assets/components/Todolist";
-import TaskContextProvider from "./context/TaskContext";
-import { FaEdit } from "react-icons/fa";
-
+// Main App component
 function App() {
   return (
-    // Wrap your entire app with Router to enable routing
-    <Router>
-      <TaskContextProvider>
-        <div className="p-5 bg-zinc-300 w-full h-screen">
-          {/* Define routes for different pages */}
-          <Switch>
-            {/* Route for the home page */}
-            <Route exact path="/" component={Todolist} />
+    // Wrap the entire app with TaskContextProvider to provide task state globally
+    <TaskContextProvider>
+      {/* Page container with padding and background styling */}
+      <div className="p-5 bg-zinc-300 w-full h-screen">
+        
+        {/* Navbar will be shown on all pages */}
+        <Navbar />
 
-            {/* Add more routes here for other pages */}
-            {/* Example route for an "About" page */}
-            {/* <Route path="/about" component={AboutPage} /> */}
-          </Switch>
-        </div>
-      </TaskContextProvider>
-    </Router>
+        {/* Define all application routes */}
+        <Routes>
+          {/* Home Page Route */}
+          <Route path="/" element={<Home />} />
+
+          {/* About Page Route */}
+          <Route path="/about" element={<AboutPage />} />
+
+          {/* Todolist Page Route */}
+          <Route path="/todolist" element={<Todolist />} />
+        </Routes>
+
+      </div>
+    </TaskContextProvider>
   );
 }
 
+// Export App component as default export
 export default App;
